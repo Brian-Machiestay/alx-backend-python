@@ -7,8 +7,14 @@ import random
 import asyncio
 
 
-async def async_generator() -> AsyncGenerator[float, None]:
+async def async_gen() -> AsyncGenerator[float, None]:
     """asynchronous generators and comprehension"""
     for i in range(10):
         await asyncio.sleep(1)
+        yield i
+
+
+async def async_generator() -> AsyncGenerator[float, None]:
+    """use async for to yield random numbers"""
+    async for i in async_gen():
         yield random.uniform(0, 10)
