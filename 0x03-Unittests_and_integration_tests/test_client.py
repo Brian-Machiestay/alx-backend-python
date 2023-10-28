@@ -3,7 +3,7 @@
 
 from parameterized import parameterized
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, PropertyMock
 from typing import (
     List,
     Dict,
@@ -29,3 +29,14 @@ class TestGithubOrgClient(unittest.TestCase):
         new_cli = GithubOrgClient(org)
         self.assertEqual(new_cli.org, exp)
         mk_json.assert_called_once_with(val)
+
+    def test_public_repos_url(self) -> None:
+        """test public repos url"""
+        new_cli = GithubOrgClient('abc')
+        with patch.object(GithubOrgClient, 'org',
+                          new_callable=PropertyMock,
+                          return_value= {
+                              'repos_url':'https://api.github.com/orgs/abc'
+                          }) as mk_org:
+            pr = 'https://api.github.com/orgs/abc'
+            self.assertEqual(new_cli._public_repos_url, pr)
