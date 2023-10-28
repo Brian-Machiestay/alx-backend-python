@@ -17,32 +17,29 @@ memoize = __import__("utils").memoize
 
 class TestAccessNestedMap(unittest.TestCase):
 
-
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
-    def test_access_nested_map(self, mmap: Mapping, pt: Sequence, exp: Any) -> Any:
+    def test_access_nested_map(self, mmap: Mapping,
+                               pt: Sequence, exp: Any) -> Any:
         """tests the access nested map of the utils class"""
         self.assertEqual(access_nested_map(mmap, pt), exp)
-
-
 
     @parameterized.expand([
         ({}, ("a",)),
         ({"a": 1}, ("a", "b"))
     ])
-    def test_access_nested_map_exception(self, mmap: Mapping, pt: Sequence) -> Any:
+    def test_access_nested_map_exception(self, mmap: Mapping,
+                                         pt: Sequence) -> Any:
         """tests that this access_nested_map raises error"""
         with self.assertRaises(KeyError):
             access_nested_map(mmap, pt)
 
 
-
 class TestGetJson(unittest.TestCase):
     """class to test the get_json method in utils"""
-
 
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
@@ -61,17 +58,19 @@ class TestGetJson(unittest.TestCase):
 class TestMemoize(unittest.TestCase):
     """test the momoized function"""
 
-
     def test_memoize(self) -> None:
         """tests the memoized function"""
 
         class TestClass:
+            """a class to test the memoized fn"""
 
             def a_method(self):
+                """return 42"""
                 return 42
 
             @memoize
             def a_property(self):
+                """a property"""
                 return self.a_method()
 
         ts_instance = TestClass()
