@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""test all functions in the utils file"""
+
 from parameterized import parameterized
 import unittest
 from unittest.mock import Mock, patch
