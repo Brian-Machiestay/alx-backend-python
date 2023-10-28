@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 """test all functions in the utills client file"""
 
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 import unittest
 from unittest.mock import Mock, patch, PropertyMock
 from typing import (
     List,
     Dict,
 )
-
+from fixtures import TEST_PAYLOAD
 
 GithubOrgClient = __import__("client").GithubOrgClient
 client = __import__("client")
-
 
 class TestGithubOrgClient(unittest.TestCase):
     """test githuborg client"""
@@ -63,3 +62,31 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_has_license(self, repo, li_key, exp) -> None:
         """test has_license method of client"""
         self.assertEqual(GithubOrgClient.has_license(repo, li_key), exp)
+
+
+@parameterized_class(('org_payload', 'repos_payload',
+                      'expected_repos', 'apache2_repos'),
+                     TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """test public repos in an integration test"""
+
+    get_patcher = ''
+
+    @classmethod
+    def _example_pay(cls):
+        """return example fixtures"""
+        return cls.repos_payload
+
+    @classmethod
+    def setupClass(cls, mk_req):
+        """setup code for this test"""
+        get_patcher = patch('client.requests.get')
+        get_patcher.start()
+        get_patcher.return_value = cls.repos_payload
+        get_patcher.json.side_effect = cls._example_pay()
+
+    @classmethod
+    def tearDownClass(cls):
+        """teardown code for this test"""
+        get_patcher.stop()
