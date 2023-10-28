@@ -18,6 +18,7 @@ memoize = __import__("utils").memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
+    """a test class to test the AccessNestedMap function in utils"""
 
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
@@ -67,12 +68,12 @@ class TestMemoize(unittest.TestCase):
             """a class to test the memoized fn"""
 
             def a_method(self):
-                """return 42"""
+                """return 42 when called"""
                 return 42
 
             @memoize
             def a_property(self):
-                """a property"""
+                """a property that relies on a_method"""
                 return self.a_method()
 
         ts_instance = TestClass()
