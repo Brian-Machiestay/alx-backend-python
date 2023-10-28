@@ -6,11 +6,14 @@ from typing import (
     Mapping,
     Sequence,
     Any,
-    Dict
+    Dict,
+    Callable
 )
 
 access_nested_map = __import__("utils").access_nested_map
 utils = __import__("utils")
+memoize = __import__("utils").memoize
+
 
 class TestAccessNestedMap(unittest.TestCase):
 
@@ -53,3 +56,29 @@ class TestGetJson(unittest.TestCase):
             mocked_utils.return_value = json_mk
             self.assertEqual(utils.get_json(url), pl)
             mocked_utils.assert_called_once_with(url)
+
+
+class TestMemoize(unittest.TestCase):
+    """test the momoized function"""
+
+
+    def test_memoize(self) -> None:
+        """tests the memoized function"""
+
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        ts_instance = TestClass()
+        with patch.object(ts_instance, 'a_method') as a_mtd_patched:
+            a_mtd_patched.return_value = 42
+            first_cll = ts_instance.a_property
+            self.assertEqual(first_cll, 42)
+            second_cll = ts_instance.a_property
+            self.assertEqual(second_cll, 42)
+            a_mtd_patched.assert_called_once()
