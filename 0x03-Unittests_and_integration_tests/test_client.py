@@ -55,3 +55,11 @@ class TestGithubOrgClient(unittest.TestCase):
             mk_repo.return_value = 'https://api.github.com/abc/vetted-app'
             new_cli = GithubOrgClient('abc')
             self.assertEqual(new_cli.public_repos(), ['vetted-app'])
+
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)
+    ])
+    def test_has_license(self, repo, li_key, exp) -> None:
+        """test has_license method of client"""
+        self.assertEqual(GithubOrgClient.has_license(repo, li_key), exp)
