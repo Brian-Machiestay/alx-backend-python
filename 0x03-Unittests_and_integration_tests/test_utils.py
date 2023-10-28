@@ -47,8 +47,9 @@ class TestGetJson(unittest.TestCase):
     ])
     def test_get_json(self, url: str, pl: Dict) -> None:
         """test the get_json method"""
-        with patch('utils.requests.get') as mocked_utils:
+        with patch.object(utils.requests, 'get') as mocked_utils:
             json_mk = Mock()
             json_mk.json = Mock(return_value=pl)
             mocked_utils.return_value = json_mk
             self.assertEqual(utils.get_json(url), pl)
+            mocked_utils.assert_called_once_with(url)
