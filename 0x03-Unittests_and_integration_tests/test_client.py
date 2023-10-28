@@ -12,6 +12,7 @@ from fixtures import TEST_PAYLOAD
 
 GithubOrgClient = __import__("client").GithubOrgClient
 client = __import__("client")
+requests = client.requests
 
 class TestGithubOrgClient(unittest.TestCase):
     """test githuborg client"""
@@ -79,9 +80,9 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         return cls.repos_payload
 
     @classmethod
-    def setupClass(cls, mk_req):
+    def setUpClass(cls, mk_req):
         """setup code for this test"""
-        get_patcher = patch('client.requests.get')
+        get_patcher = patch('requests.get')
         get_patcher.start()
         get_patcher.return_value = cls.repos_payload
         get_patcher.json.side_effect = cls._example_pay()
