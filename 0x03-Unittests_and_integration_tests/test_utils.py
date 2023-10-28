@@ -21,3 +21,14 @@ class TestAccessNestedMap(unittest.TestCase):
     def test_access_nested_map(self, mmap: Mapping, pt: Sequence, exp: Any) -> Any:
         """tests the access nested map of the utils class"""
         self.assertEqual(access_nested_map(mmap, pt), exp)
+
+
+
+    @parameterized.expand([
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b"))
+    ])
+    def test_access_nested_map_exception(self, mmap: Mapping, pt: Sequence) -> Any:
+        """tests that this access_nested_map raises error"""
+        with self.assertRaises(KeyError):
+            access_nested_map(mmap, pt)
