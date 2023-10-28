@@ -35,8 +35,23 @@ class TestGithubOrgClient(unittest.TestCase):
         new_cli = GithubOrgClient('abc')
         with patch.object(GithubOrgClient, 'org',
                           new_callable=PropertyMock,
-                          return_value= {
-                              'repos_url':'https://api.github.com/orgs/abc'
+                          return_value={
+                              'repos_url': 'https://api.github.com/orgs/abc'
                           }) as mk_org:
             pr = 'https://api.github.com/orgs/abc'
             self.assertEqual(new_cli._public_repos_url, pr)
+
+    @patch('client.get_json')
+    def test_public_repos(self, mk_json: Mock) -> None:
+        """test public_repos method"""
+        pl = [{
+            'name': 'vetted-app',
+            'repos_url': 'https://api.github.com/abc/vetted-app'
+        }]
+        mk_json.return_value = pl
+        with patch.object(GithubOrgClient,
+                          '_public_repos_url',
+                          new_callable=PropertyMock) as mk_repo:
+            mk_repo.return_value = 'https://api.github.com/abc/vetted-app'
+            new_cli = GithubOrgClient('abc')
+            self.assertEqual(new_cli.public_repos(), ['vetted-app'])
