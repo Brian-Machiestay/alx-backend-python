@@ -14,10 +14,10 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
     @parameterized.expand([
-        ({"a": 1}, ("a",)),
-        ({"a": {"b": 2}}, ("a",)),
-        ({"a": {"b": 2}}, ("a", "b"))
+        ({"a": 1}, ("a",), 1),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
+        ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
-    def test_access_nested_map(self, mmap: Mapping, pt: Sequence) -> Any:
+    def test_access_nested_map(self, mmap: Mapping, pt: Sequence, exp: Any) -> Any:
         """tests the access nested map of the utils class"""
-        print(access_nested_map(mmap, pt))
+        self.assertEqual(access_nested_map(mmap, pt), exp)
