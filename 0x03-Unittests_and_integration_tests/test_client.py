@@ -11,7 +11,8 @@ from typing import (
 from fixtures import TEST_PAYLOAD
 
 GithubOrgClient = __import__("client").GithubOrgClient
-client = __import__("client")
+client = __import__("utils")
+
 requests = client.requests
 
 class TestGithubOrgClient(unittest.TestCase):
